@@ -1,0 +1,122 @@
+# Binaries
+/bin/
+/dist/
+/release/
+/*.exe
+/*.dll
+/*.so
+/*.dylib
+/SendDrop
+/SendDrop.exe
+/SendDrop_*
+*.tar.gz
+*.zip
+*.tar.xz
+*.deb
+*.rpm
+
+# AppImage build
+/AppDir/
+/appimagetool
+/linuxdeploy-x86_64.AppImage
+/*.AppImage
+*.AppImage.tar.gz
+
+# Build artifacts
+/build/
+/fyne-cross/
+/fyne-cross.exe
+/*_backup.go
+/*_minimal.go
+/internal/gui/*_backup.go
+/internal/gui/*_minimal.go
+
+# Config and data
+/config.json
+/sharing/
+/*.db
+/*.sqlite
+/*.sqlite3
+
+# Go workspace
+/go.sum
+/vendor/
+/.go/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.code-workspace
+*.iml
+.project
+.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+*.temp
+
+# Temporary files
+/tmp/
+/*.tmp
+/*.temp
+/*.cache
+
+# Test files
+/*_test.go
+/coverage.out
+/coverage.html
+/*.test
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+/logs/
+/*.log
+
+# Documentation
+/_docs/
+/*.pdf
+/*.docx
+
+# Misc
+*.orig
+*.rej
+*.patch
+*.bak
+core.*
+*.core
+*.swp
+*.swo
+*~
+
+# Final release packages
+/SendDrop-*.tar.gz
+/SendDrop-*.zip
+/Release-*.tar.gz
+/release-*.zip
+
+# Temporary files
+TODO_ALPHA.md
+SendDrop-v*.tar.gz
+*.tmp
+*.temp
+
+# AppImage tool
+appimagetool
+linuxdeploy-x86_64.AppImage
+
+# Go sum
+go.sum
