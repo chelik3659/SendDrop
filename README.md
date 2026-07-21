@@ -1,2 +1,36 @@
-# SendDrop
-SendDrop is a free cross-platform local network file sharing tool that works without internet. Just drag &amp; drop files into the app window, scan the QR code, and download from any device via browser. Works on Windows, Linux, macOS, Android. No cables, clouds, accounts, or limits. Run it — and share instantly.
+# SendDrop - Кроссплатформенное приложение для обмена файлами
+
+## 📦 Описание
+
+SendDrop - это десктопное приложение для быстрого обмена файлами в локальной сети. 
+Приложение поднимает HTTP-сервер и предоставляет удобный интерфейс для загрузки, 
+скачивания и управления файлами.
+
+## ✨ Особенности
+
+- 🚀 **Кроссплатформенность**: Windows, Linux, macOS
+- 📱 **QR-код**: Быстрое подключение с телефона
+- 📁 **Drag & Drop**: Перетаскивание файлов в окно
+- 🔄 **Автообновление**: Проверка новых версий на GitHub
+- 🌍 **Мультиязычность**: Английский и русский
+- 🌙 **Тёмная тема**: Встроенная поддержка тёмной темы
+- 📋 **Системный трей**: Работа в фоновом режиме
+
+## 🚀 Быстрый старт
+
+### Windows
+1. Скачайте `SendDrop.exe`
+2. Запустите файл
+3. Нажмите "START SERVER"
+4. Отсканируйте QR-код или введите URL в браузере
+
+### Linux/macOS
+1. Скачайте бинарный файл для вашей архитектуры
+2. Сделайте исполняемым: `chmod +x SendDrop`
+3. Запустите: `./SendDrop`
+
+## 🔧 Сборка из исходников
+
+### Установка зависимостей
+```bash
+go mod download
