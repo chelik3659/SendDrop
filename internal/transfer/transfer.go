@@ -26,7 +26,6 @@ func (t *Transfer) SetOnFileReceive(cb func(string, []byte)) {
 	t.onFileReceive = cb
 }
 
-// SendFile отправляет файл на указанный IP
 func (t *Transfer) SendFile(ip string, filename string, data []byte) error {
 	conn, err := net.DialTimeout("tcp", ip+":"+fmt.Sprint(transferPort), 10*time.Second)
 	if err != nil {
@@ -34,19 +33,16 @@ func (t *Transfer) SendFile(ip string, filename string, data []byte) error {
 	}
 	defer conn.Close()
 
-	// Отправляем заголовок: SEND_FILE|имя_файла|размер\n
 	header := fmt.Sprintf("SEND_FILE|%s|%d\n", filename, len(data))
 	if _, err := conn.Write([]byte(header)); err != nil {
 		return err
 	}
-	// Отправляем данные
 	if _, err := conn.Write(data); err != nil {
 		return err
 	}
 	return nil
 }
 
-// StartServer запускает TCP сервер для приёма файлов
 func (t *Transfer) StartServer(shareDir string) {
 	listener, err := net.Listen("tcp", ":"+fmt.Sprint(transferPort))
 	if err != nil {
@@ -68,7 +64,6 @@ func (t *Transfer) handleConnection(conn net.Conn, shareDir string) {
 	defer conn.Close()
 	reader := bufio.NewReader(conn)
 
-	// Читаем заголовок до \n
 	header, err := reader.ReadString('\n')
 	if err != nil {
 		return
@@ -77,7 +72,6 @@ func (t *Transfer) handleConnection(conn net.Conn, shareDir string) {
 	if !strings.HasPrefix(header, "SEND_FILE|") {
 		return
 	}
-
 	parts := strings.Split(strings.TrimPrefix(header, "SEND_FILE|"), "|")
 	if len(parts) != 2 {
 		return
@@ -87,20 +81,15 @@ func (t *Transfer) handleConnection(conn net.Conn, shareDir string) {
 	if err != nil {
 		return
 	}
-
-	// Читаем ровно size байт
 	data := make([]byte, size)
 	_, err = io.ReadFull(reader, data)
 	if err != nil {
 		return
 	}
-
-	// Сохраняем файл
 	fullPath := filepath.Join(shareDir, filename)
 	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err == nil {
 		os.WriteFile(fullPath, data, 0644)
 	}
-
 	if t.onFileReceive != nil {
 		t.onFileReceive(filename, data)
 	}

@@ -26,6 +26,7 @@ type Discovery struct {
 	onPeerRemove func(Peer)
 	localIP    string
 	peerName   string
+	conn       net.Conn
 }
 
 func NewDiscovery(peerName string) *Discovery {
@@ -47,32 +48,36 @@ func (d *Discovery) Start() {
 	go d.listenLoop()
 }
 
-// broadcastLoop отправляет UDP broadcast каждые 3 секунды
-func (d *Discovery) broadcastLoop() {
+// SendDiscoveryRequest отправляет один запрос (для ручного обновления)
+func (d *Discovery) SendDiscoveryRequest() {
 	conn, err := net.Dial("udp", "255.255.255.255:"+fmt.Sprint(broadcastPort))
 	if err != nil {
-		fmt.Println("Broadcast error:", err)
 		return
 	}
 	defer conn.Close()
+	conn.Write([]byte(discoveryMsg))
+}
 
-	msg := []byte(discoveryMsg)
+func (d *Discovery) broadcastLoop() {
 	for {
-		conn.Write(msg)
-		time.Sleep(3 * time.Second)
+		conn, err := net.Dial("udp", "255.255.255.255:"+fmt.Sprint(broadcastPort))
+		if err != nil {
+			time.Sleep(3 * time.Second)
+			continue
+		}
+		conn.Write([]byte(discoveryMsg))
+		conn.Close()
+		time.Sleep(5 * time.Second)
 	}
 }
 
-// listenLoop слушает UDP ответы
 func (d *Discovery) listenLoop() {
 	addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf(":%d", broadcastPort))
 	if err != nil {
-		fmt.Println("Listen error:", err)
 		return
 	}
 	conn, err := net.ListenUDP("udp", addr)
 	if err != nil {
-		fmt.Println("ListenUDP error:", err)
 		return
 	}
 	defer conn.Close()
@@ -85,11 +90,10 @@ func (d *Discovery) listenLoop() {
 		}
 		msg := string(buf[:n])
 		if msg == discoveryMsg {
-			// Кто-то ищет устройства — отвечаем
+			// Кто-то ищет — отвечаем
 			response := responsePrefix + d.localIP + "|" + d.peerName
 			conn.WriteToUDP([]byte(response), remoteAddr)
 		} else if strings.HasPrefix(msg, responsePrefix) {
-			// Получили ответ от другого устройства
 			parts := strings.Split(strings.TrimPrefix(msg, responsePrefix), "|")
 			if len(parts) >= 2 {
 				ip := parts[0]

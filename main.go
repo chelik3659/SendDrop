@@ -12,11 +12,20 @@ const version = "0.2.0-alpha"
 
 func main() {
 	log.Printf("🚀 SendDrop P2P %s", version)
-	// Создаём папку для общих файлов
-	exePath, _ := os.Executable()
-	shareDir := filepath.Join(filepath.Dir(exePath), "sharing")
-	os.MkdirAll(shareDir, 0755)
 
-	window := gui.NewWindow()
+	// Используем домашнюю папку пользователя
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal("Cannot get home directory:", err)
+	}
+
+	shareDir := filepath.Join(home, "SendDrop")
+	if err := os.MkdirAll(shareDir, 0755); err != nil {
+		log.Fatal("Cannot create share directory:", err)
+	}
+
+	log.Printf("📁 Файлы сохраняются в: %s", shareDir)
+
+	window := gui.NewWindow(shareDir)
 	window.Run()
 }
