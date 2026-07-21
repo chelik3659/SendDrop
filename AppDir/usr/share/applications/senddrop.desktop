@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=SendDrop
+Comment=File Sharing Application
+Exec=SendDrop
+Icon=senddrop
+Terminal=false
+Type=Application
+Categories=Network;
+StartupNotify=true
+StartupWMClass=SendDrop
